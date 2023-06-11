@@ -1,0 +1,64 @@
+
+
+body {
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    background-image: url(./Assets/mvp-banner.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    
+}
+
+section div {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    padding-top: 7%;
+}
+
+section div h1 {
+    position: absolute;
+    top: 1%;
+    font-family: 'Londrina Solid';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 35px;
+    line-height: 50px;
+    display: flex;
+    text-transform: capitalize;
+    color: #FFFFFF;
+}
+
+section div h2 {
+
+    font-family: 'Bebas Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 66px;
+    line-height: 0;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+}
+
+section div a {
+
+    font-family: 'Barlow';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 30px;
+    text-decoration: none;
+
+    color: #292929;
+
+    width: 180px;
+    height: 35px;
+    background: #FDC913;
+    border-radius: 50px
+}
