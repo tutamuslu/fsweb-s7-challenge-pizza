@@ -1,0 +1,18 @@
+.pizza-boyut{
+    display: flex;
+    justify-content: space-between;
+}
+
+.pizza-kalinlik{
+    display: flex;
+    flex-direction: column;
+}
+
+#pizza-form span{
+    color:red;
+    font-weight: bold;
+}
+
+#pizza-form .form-label{
+    font-weight: bold;
+}

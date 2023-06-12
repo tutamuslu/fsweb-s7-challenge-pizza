@@ -21,7 +21,7 @@ const App = () => {
             <h1>Teknolojik Yemekler</h1>
             <h2>KOD ACIKTIRIR</h2>
             <h2>PİZZA, DOYURUR</h2>
-            <Link to = "/siparis">
+            <Link id="order-pizza" to = "/pizza">
             ACIKTIM
             </Link>
         </div>
