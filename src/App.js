@@ -17,7 +17,7 @@ const App = () => {
   return (
     <>
     <section>
-        <div>
+        <div id="anasayfa-icerik">
             <h1>Teknolojik Yemekler</h1>
             <h2>KOD ACIKTIRIR</h2>
             <h2>PİZZA, DOYURUR</h2>

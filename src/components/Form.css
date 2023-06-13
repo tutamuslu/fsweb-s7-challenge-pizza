@@ -1,3 +1,7 @@
+.ust{
+    padding-top: 1%;
+}
+
 .pizza-boyut{
     display: flex;
     justify-content: space-between;
@@ -15,4 +19,77 @@
 
 #pizza-form .form-label{
     font-weight: bold;
+}
+
+#ek-malzemeler{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.malzeme{
+    width: 30%;
+}
+
+#siparis-ozet button{
+    background-color: #f2be14;
+    padding: 20px;
+    color:black;
+    font-size:17px;
+    border: none;
+    
+}
+
+#siparis-ozet label {
+    padding: 20px;
+    border: 1px solid #ccc;
+    font-size:17px;
+}
+
+#siparis-ozet {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+
+}
+
+#siparis-ver{
+    width: 100%;
+}
+#siparis-adet {
+    width: 30%
+}
+
+#siparis-toplami{
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 10%;
+}
+
+#siparis-toplami h2{
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+#siparis-toplami h3{
+    width: 18rem;
+    font-size: 1rem;
+}
+#siparis-toplami h4{
+    font-size: 1.1rem;
+}
+.secimler {
+    display: flex;
+    flex-direction: row;
+}
+
+.toplam {
+    display: flex;
+    flex-direction: row;
+    color: red;
+    font-weight: 500;
+}
+
+input{
+    background-color: #f2be14;
 }

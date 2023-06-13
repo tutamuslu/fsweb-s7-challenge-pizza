@@ -5,6 +5,31 @@ import { useEffect } from "react";
 import MyForm from "./Form";
 export default function Siparis(props) {
 
+    const malzemeler = [
+        { name: "misir", title: "Mısır", secim: false },
+        { name: "sucuk", title: "Sucuk", secim: false },
+        { name: "peynir", title: "Peynir", secim: false },
+        { name: "sosis", title: "Sosis", secim: false },
+        { name: "salam", title: "Salam", secim: false },
+        { name: "zeytin", title: "Zeytin", secim: false },
+        { name: "mantar", title: "Mantar", secim: false },
+        { name: "biber", title: "Biber", secim: false },
+        { name: "domat", title: "Domates", secim: false }
+    ]
+
+    const urun = {
+        isim: "Position Absolute Acı Pizza",
+        fiyat: 85.50,
+        puan: 4.9,
+        degerlendirmeSayisi: 200,
+        urunAciklama: "Frontent Dev olarak hala position:absolute kullanıyorsan bu çok acı pizza tam sana göre. Pizza, domates, peynir ve genellikle çeşitli diğer malzemelerle kaplanmış, daha sonra geleneksel olarak odun ateşinde bir fırında yüksek sıcaklıkta pişirilen, genellikle yuvarlak, düzleştirilmiş mayalı buğday bazlı hamurdan oluşan İtalyan kökenli lezzetli bir yemektir. . Küçük bir pizzaya bazen pizzetta denir"
+    }
+
+    const handleSubmit = (e, siparis) => {
+        e.preventDefault();
+        console.log(siparis)
+    }
+
     useEffect(() => {
         WebFont.load({
           google: {
@@ -24,16 +49,16 @@ export default function Siparis(props) {
                 </div>
             </div>
             <div className="icerik">
-                <h2>Position Absolute Acı Pizza</h2>
+                <h2>{urun.isim}</h2>
                 <div className="bilgi">
-                    <h3>85.50₺</h3>
-                    <h4>4.9</h4>
-                    <h5>(200)</h5>
+                    <h3>{urun.fiyat}₺</h3>
+                    <h4>{urun.puan}</h4>
+                    <h5>({urun.degerlendirmeSayisi})</h5>
                 </div>
                 <p>
-                Frontent Dev olarak hala position:absolute kullanıyorsan bu çok acı pizza tam sana göre. Pizza, domates, peynir ve genellikle çeşitli diğer malzemelerle kaplanmış, daha sonra geleneksel olarak odun ateşinde bir fırında yüksek sıcaklıkta pişirilen, genellikle yuvarlak, düzleştirilmiş mayalı buğday bazlı hamurdan oluşan İtalyan kökenli lezzetli bir yemektir. . Küçük bir pizzaya bazen pizzetta denir
+                {urun.urunAciklama}
                 </p>
-                <MyForm/>
+                <MyForm malzemeler={malzemeler} handleSubmit={handleSubmit}/>
             </div>
         </>
     );
