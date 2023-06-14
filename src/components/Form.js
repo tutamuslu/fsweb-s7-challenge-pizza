@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-
+import { Link } from 'react-router-dom';
 import { Form, FormGroup, Label, Input, Button, FormFeedback, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import * as Yup from "yup";
 import './Form.css';
+
 const MyForm = (props) => {
 
-    const { malzemeler, handleSubmit, urun } = props;
+    const { malzemeler, urun } = props;
 
     const bosData = {
         isim: "",
@@ -27,12 +28,14 @@ const MyForm = (props) => {
     const [errors, setFormErrors] = useState(formErrors)
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [valid, setValid] = useState(false);
+
     const toggle = () => setDropdownOpen((prevState) => !prevState);
 
     const formSchema = Yup.object().shape({
         isim: Yup.string().required("İsim boş bırakılamaz!").min(5, "İsim Soyisim minimum 5 karakter olmalı!"),
         boyut: Yup.string().required("Pizza boyutunu seçmelisin!"),
-        hamurSecimi: Yup.string().required("Hamur seçimi yapmalısınız!")
+        hamurSecimi: Yup.string().required("Hamur seçimi yapmalısınız!"),
+        not: Yup.string()
     });
 
     const onSizeSelected = (size) => {
@@ -85,6 +88,7 @@ const MyForm = (props) => {
             setFormData({ ...formData })
         }
     }
+
     const arttir = (e) => {
         e.preventDefault();
         formData.adet++;
@@ -100,7 +104,7 @@ const MyForm = (props) => {
     useEffect(() => {
         formSchema.isValid(formData).then((vld) => {
             console.log(malzemeAdet())
-            setValid(vld && malzemeAdet() < 5)
+            setValid(vld && malzemeAdet() < 6)
         });
     }, [formData]);
 
@@ -201,11 +205,10 @@ const MyForm = (props) => {
                             <h4>{toplam()}₺</h4>
                         </div>
                     </div>
-                    <Button id='siparis-ver' disabled={!valid} onClick={(e) => { handleSubmit(e, formData) }}>SİPARİŞ VER </Button>
+                    <Link to="/siparis-onay"> <Button id='siparis-ver' disabled={!valid}>SİPARİŞ VER </Button></Link>
 
                 </FormGroup>
             </div>
-
         </Form>
     );
 }

@@ -4,8 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css";
 import App from "./App";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Siparis from "./components/siparis";
 import SiparisOnay from "./components/siparis-onay";
+import Siparis from "./components/siparis";
 
 ReactDOM.render(
     <BrowserRouter>

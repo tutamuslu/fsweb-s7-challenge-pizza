@@ -2,7 +2,7 @@ import React from "react";
 import './App.css'
 import WebFont from 'webfontloader';
 import { useEffect } from "react";
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const App = () => {
 
@@ -12,20 +12,20 @@ const App = () => {
         families: ['Barlow', 'Bebas+Neue', 'Londrina+Solid']
       }
     });
-   }, []);
+  }, []);
 
   return (
     <>
-    <section>
+      <section>
         <div id="anasayfa-icerik">
-            <h1>Teknolojik Yemekler</h1>
-            <h2>KOD ACIKTIRIR</h2>
-            <h2>PİZZA, DOYURUR</h2>
-            <Link id="order-pizza" to = "/pizza">
+          <h1>Teknolojik Yemekler</h1>
+          <h2>KOD ACIKTIRIR</h2>
+          <h2>PİZZA, DOYURUR</h2>
+          <Link id="order-pizza" to="/pizza">
             ACIKTIM
-            </Link>
+          </Link>
         </div>
-    </section>
+      </section>
     </>
   );
 };
