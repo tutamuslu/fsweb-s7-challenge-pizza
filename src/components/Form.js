@@ -114,24 +114,24 @@ const MyForm = (props) => {
                 <FormGroup>
                     <Label for='pizza-boyut'>Boyut Seç <span>*</span></Label>
                     <FormGroup check>
-                        <Label check><Input type="radio" name="boyut" onClick={() => { handleChange("boyut", "Küçük") }} /> Küçük</Label>
+                        <Label check><Input type="radio" id='kucuk' name="boyut" onClick={() => { handleChange("boyut", "Küçük") }} /> Küçük</Label>
                     </FormGroup>
                     <FormGroup check>
-                        <Label check> <Input type="radio" name="boyut" onClick={() => { handleChange("boyut", "Orta") }} /> Orta</Label>
+                        <Label check> <Input type="radio" id='orta' name="boyut" onClick={() => { handleChange("boyut", "Orta") }} /> Orta</Label>
                     </FormGroup>
                     <FormGroup check>
-                        <Label check><Input type="radio" name="boyut" onClick={() => { handleChange("boyut", "Büyük") }} /> Büyük</Label>
+                        <Label check><Input type="radio" id='buyuk' name="boyut" onClick={() => { handleChange("boyut", "Büyük") }} /> Büyük</Label>
                     </FormGroup>
                     <FormFeedback>{errors.boyut}</FormFeedback>
                 </FormGroup>
                 <FormGroup className='pizza-kalinlik'>
                     <Label for='size-dropdown'>Hamur Seç<span>*</span></Label>
                     <Dropdown id='size-dropdown' isOpen={dropdownOpen} toggle={toggle} value={formData.hamurSecimi}>
-                        <DropdownToggle caret>Seçim {formData.hamurSecimi}</DropdownToggle>
+                        <DropdownToggle name="secim" caret>Seçim {formData.hamurSecimi}</DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem onClick={() => { onSizeSelected("İnce") }}>İnce</DropdownItem>
-                            <DropdownItem onClick={() => { onSizeSelected("Normal") }}>Normal</DropdownItem>
-                            <DropdownItem onClick={() => { onSizeSelected("Kalın") }}>Kalın</DropdownItem>
+                            <DropdownItem name="ince" onClick={() => { onSizeSelected("İnce") }}>İnce</DropdownItem>
+                            <DropdownItem name="normal" onClick={() => { onSizeSelected("Normal") }}>Normal</DropdownItem>
+                            <DropdownItem name="kalin" onClick={() => { onSizeSelected("Kalın") }}>Kalın</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                     <FormFeedback>{errors.hamurSecimi}</FormFeedback>
@@ -189,9 +189,9 @@ const MyForm = (props) => {
             <hr />
             <div id="siparis-ozet">
                 <div id='siparis-adet'>
-                    <Button onClick={azalt}>-</Button>
+                    <Button id='azalt' onClick={azalt}>-</Button>
                     <Label>{formData.adet}</Label>
-                    <Button onClick={arttir}>+</Button>
+                    <Button id='arttir' onClick={arttir}>+</Button>
                 </div>
                 <FormGroup>
                     <div id="siparis-toplami">
