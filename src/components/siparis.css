@@ -9,7 +9,7 @@ body {
     flex-direction: column;
     height: 10%;
     background: #CE2829;
-    border-bottom: 1px solid #C20608;
+    border-bottom: 1px solid #CE2829;
     box-shadow: 0px 9px 150px -30px rgba(0, 0, 0, 0.09);
 }
 
@@ -70,7 +70,7 @@ body {
     line-height: 29px;
     display: flex;
     align-items: center;
-    color: #5F5F5F;
+    color: #292929;
 }
 
 .bilgi {
@@ -86,13 +86,13 @@ body {
 }
 
 .bilgi h4 {
-    color: #5F5F5F;
+    color: #292929;
     font-size: 16px;
     width: 30%;
 }
 
 .bilgi h5 {
-    color: #5F5F5F;
+    color: #292929;
     font-size: 16px;
     width: 10%
 }

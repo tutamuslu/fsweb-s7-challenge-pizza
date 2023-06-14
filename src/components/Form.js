@@ -1,11 +1,11 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Form, FormGroup, Label, Input, Button, FormFeedback, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import * as Yup from "yup";
 import './Form.css';
 const MyForm = (props) => {
 
-    const {malzemeler, handleSubmit} = props;
+    const { malzemeler, handleSubmit, urun } = props;
 
     const bosData = {
         isim: "",
@@ -26,32 +26,56 @@ const MyForm = (props) => {
     const [formData, setFormData] = useState(bosData)
     const [errors, setFormErrors] = useState(formErrors)
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [valid, setValid] = useState(false);
     const toggle = () => setDropdownOpen((prevState) => !prevState);
 
+    const formSchema = Yup.object().shape({
+        isim: Yup.string().required("İsim boş bırakılamaz!").min(5, "İsim Soyisim minimum 5 karakter olmalı!"),
+        boyut: Yup.string().required("Pizza boyutunu seçmelisin!"),
+        hamurSecimi: Yup.string().required("Hamur seçimi yapmalısınız!")
+    });
+
     const onSizeSelected = (size) => {
-        console.log(size)
         formData.hamurSecimi = size;
         setFormData({ ...formData });
-        console.log(formData);
-
     }
 
-    const inputCheckboxHandler = (name) => {
-        // const secilenAdet = formData.malzemeler.find(x => x.secim == true).length;
-        if (true) {
-            console.log(formData)
-            formData.malzemeler.find(x => x.name == name).secim = true;
-            setFormData({ ...formData })
-        } else {
+    const malzemeAdet = () => {
+        let count = 0;
+        formData.malzemeler.forEach(m => {
+            if (m.secim === true) {
+                count++;
+            }
+        })
+        return count;
+    }
+
+    const inputCheckboxHandler = (e) => {
+        const { name, checked } = e.target;
+        formData.malzemeler.find(x => x.name === name).secim = checked;
+        setFormData({ ...formData })
+        if (malzemeAdet() > 5) {
             errors.malzemeler = "En fazla 5 malzeme seçebilirsiz";
             setFormErrors({ ...errors })
+        } else {
+            errors.malzemeler = "";
+            setFormErrors({ ...errors })
         }
+        console.log(errors)
     }
 
     const handleChange = (name, value) => {
+        Yup.reach(formSchema, name)
+            .validate(value)
+            .then(() => {
+                setFormErrors({ ...errors, [name]: "" });
+            })
+            .catch((err) => {
+                setFormErrors({ ...errors, [name]: err.errors[0] });
+            });
+
         formData[name] = value;
         setFormData({ ...formData });
-        console.log(formData)
     }
 
     const azalt = (e) => {
@@ -67,20 +91,34 @@ const MyForm = (props) => {
         setFormData({ ...formData })
     }
 
+    const toplam = () => {
+        const ekmalzeme = malzemeAdet() * 5;
+        const urunFiyat = urun.fiyat + ekmalzeme;
+        return urunFiyat * formData.adet;
+    }
+
+    useEffect(() => {
+        formSchema.isValid(formData).then((vld) => {
+            console.log(malzemeAdet())
+            setValid(vld && malzemeAdet() < 5)
+        });
+    }, [formData]);
+
     return (
         <Form id='pizza-form'>
             <FormGroup className='pizza-boyut'>
                 <FormGroup>
                     <Label for='pizza-boyut'>Boyut Seç <span>*</span></Label>
                     <FormGroup check>
-                        <Label check><Input type="radio" name="radio1" onClick={() => { handleChange("boyut", "Küçük") }} /> Küçük</Label>
+                        <Label check><Input type="radio" name="boyut" onClick={() => { handleChange("boyut", "Küçük") }} /> Küçük</Label>
                     </FormGroup>
                     <FormGroup check>
-                        <Label check> <Input type="radio" name="radio1" onClick={() => { handleChange("boyut", "Orta") }} /> Orta</Label>
+                        <Label check> <Input type="radio" name="boyut" onClick={() => { handleChange("boyut", "Orta") }} /> Orta</Label>
                     </FormGroup>
                     <FormGroup check>
-                        <Label check><Input type="radio" name="radio1" onClick={() => { handleChange("boyut", "Büyük") }} /> Büyük</Label>
+                        <Label check><Input type="radio" name="boyut" onClick={() => { handleChange("boyut", "Büyük") }} /> Büyük</Label>
                     </FormGroup>
+                    <FormFeedback>{errors.boyut}</FormFeedback>
                 </FormGroup>
                 <FormGroup className='pizza-kalinlik'>
                     <Label for='size-dropdown'>Hamur Seç<span>*</span></Label>
@@ -92,20 +130,21 @@ const MyForm = (props) => {
                             <DropdownItem onClick={() => { onSizeSelected("Kalın") }}>Kalın</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
+                    <FormFeedback>{errors.hamurSecimi}</FormFeedback>
                 </FormGroup>
             </FormGroup>
-            <h3>Ek Malzemeler</h3>
+            <h3 className='ek-baslik'>Ek Malzemeler</h3>
             <p>En fazla 5 malzeme seçebilirsiniz. 5₺</p>
             <FormGroup id='ek-malzemeler'>
                 {
-                    malzemeler.map(malzeme => (
-                        <FormGroup className='malzeme'>
+                    formData.malzemeler.map(malzeme => (
+                        <FormGroup key={malzeme.name} className='malzeme'>
                             <Input
                                 id={malzeme.name}
                                 type="checkbox"
                                 name={malzeme.name}
                                 value={malzeme.secim}
-                                onChange={() => { inputCheckboxHandler(malzeme.name) }}
+                                onChange={inputCheckboxHandler}
                             />
                             <Label style={{ "marginLeft": "10px" }}>
                                 {malzeme.title}
@@ -113,7 +152,7 @@ const MyForm = (props) => {
                         </FormGroup>
                     ))
                 }
-                <FormFeedback>{errors.malzemeler}</FormFeedback>
+                <FormFeedback aria-invalid={!!errors.malzemeler}>{errors.malzemeler}</FormFeedback>
             </FormGroup>
             <FormGroup>
                 <Label for="name-input">
@@ -155,14 +194,14 @@ const MyForm = (props) => {
                         <h2>Sipariş Toplamı</h2>
                         <div className='secimler'>
                             <h3>Seçimler</h3>
-                            <h4>25.00₺</h4>
+                            <h4>{malzemeAdet() * 5}.00₺</h4>
                         </div>
                         <div className='toplam'>
                             <h3>Toplam</h3>
-                            <h4>110.50₺</h4>
+                            <h4>{toplam()}₺</h4>
                         </div>
                     </div>
-                    <Button id='siparis-ver' onClick={(e) => {handleSubmit(e, formData)}}>SİPARİŞ VER </Button>
+                    <Button id='siparis-ver' disabled={!valid} onClick={(e) => { handleSubmit(e, formData) }}>SİPARİŞ VER </Button>
 
                 </FormGroup>
             </div>
