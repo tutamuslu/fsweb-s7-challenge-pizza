@@ -34,6 +34,10 @@ export default function Siparis() {
         });
     }, []);
 
+    useEffect(() => {
+        document.querySelector('body').style.background = '#FFF';
+    }, []);
+
     return (
         <div id="siparis">
             <div className="ust">
