@@ -161,6 +161,7 @@ const MyForm = (props) => {
             <FormGroup>
                 <Label for="name-input">
                     İsim Soyisim
+                    <span> * </span>
                 </Label>
                 <Input
                     id="name-input"
