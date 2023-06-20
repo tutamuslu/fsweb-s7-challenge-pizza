@@ -8,7 +8,7 @@ export default function SiparisOnay() {
     useEffect(() => {
         WebFont.load({
             google: {
-                families: ['Bebas+Neue', 'Londrina+Solid']
+                families: ['Barlow', 'Quattrocento', 'Satisfy']
             }
         });
     }, []);
@@ -21,7 +21,7 @@ export default function SiparisOnay() {
         <div id="siparis-onay">
             <div id="onay">
                 <h1>Teknolojik Yemekler</h1>
-                <h2>TEBRIKLER!</h2>
+                <h2>TEBRİKLER!</h2>
                 <h2>SİPARİŞİNİZ ALINDI!</h2>
             </div>
         </div>

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Form, FormGroup, Label, Input, Button, FormFeedback, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import * as Yup from "yup";
 import './Form.css';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const MyForm = (props) => {
+
+    const navigate = useNavigate();
 
     const { malzemeler, urun } = props;
 
@@ -12,7 +15,7 @@ const MyForm = (props) => {
         isim: "",
         boyut: "",
         hamurSecimi: "",
-        malzemeler: malzemeler,
+        malzemeler: [],
         not: "",
         adet: 1
     }
@@ -26,45 +29,51 @@ const MyForm = (props) => {
 
     const [formData, setFormData] = useState(bosData)
     const [errors, setFormErrors] = useState(formErrors)
-    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [valid, setValid] = useState(false);
 
+    // dropdown için
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggle = () => setDropdownOpen((prevState) => !prevState);
 
     const formSchema = Yup.object().shape({
         isim: Yup.string().required("İsim boş bırakılamaz!").min(5, "İsim Soyisim minimum 5 karakter olmalı!"),
         boyut: Yup.string().required("Pizza boyutunu seçmelisin!"),
         hamurSecimi: Yup.string().required("Hamur seçimi yapmalısınız!"),
+        malzemeler: Yup.array().max(5, "En fazla 5 tane ek malzeme seçebilirsin!"),
         not: Yup.string()
     });
 
-    const onSizeSelected = (size) => {
-        formData.hamurSecimi = size;
-        setFormData({ ...formData });
-    }
-
     const malzemeAdet = () => {
-        let count = 0;
-        formData.malzemeler.forEach(m => {
-            if (m.secim === true) {
-                count++;
-            }
-        })
-        return count;
+        return formData.malzemeler.length;
     }
 
     const inputCheckboxHandler = (e) => {
-        const { name, checked } = e.target;
-        formData.malzemeler.find(x => x.name === name).secim = checked;
-        setFormData({ ...formData })
-        if (malzemeAdet() > 5) {
-            errors.malzemeler = "En fazla 5 malzeme seçebilirsiz";
-            setFormErrors({ ...errors })
-        } else {
-            errors.malzemeler = "";
-            setFormErrors({ ...errors })
+
+        const { name } = e.target;
+
+        let kopya = [...formData.malzemeler]
+
+        if (kopya.find(x => x.name === name) != null) {
+            kopya = kopya.filter(x => x.name !== name)
         }
-        console.log(errors)
+        else {
+            kopya.push(malzemeler.find(x => x.name === name))
+        }
+
+        // input change ile birlikte yup validasyon yapsın
+        handleChange("malzemeler", kopya);
+
+    }
+
+    // axios isteğinden sonra sipariş onaya geçeriz
+    const onSubmit = (e) => {
+        e.preventDefault();
+        axios.post("https://620d69fb20ac3a4eedc05e3a.mockapi.io/api/products", formData)
+        .then(r => {
+            // sipariş bilgileri
+            console.log(r.data)
+            navigate("/siparis-onay")
+        })
     }
 
     const handleChange = (name, value) => {
@@ -77,22 +86,19 @@ const MyForm = (props) => {
                 setFormErrors({ ...errors, [name]: err.errors[0] });
             });
 
-        formData[name] = value;
-        setFormData({ ...formData });
+        setFormData({ ...formData, [name]: value });
     }
 
     const azalt = (e) => {
         e.preventDefault();
         if (formData.adet > 1) {
-            formData.adet--;
-            setFormData({ ...formData })
+            setFormData({ ...formData, ["adet"]: formData.adet - 1 })
         }
     }
 
     const arttir = (e) => {
         e.preventDefault();
-        formData.adet++;
-        setFormData({ ...formData })
+        setFormData({ ...formData, ["adet"]: formData.adet + 1 })
     }
 
     const toplam = () => {
@@ -103,24 +109,23 @@ const MyForm = (props) => {
 
     useEffect(() => {
         formSchema.isValid(formData).then((vld) => {
-            console.log(malzemeAdet())
             setValid(vld && malzemeAdet() < 6)
         });
     }, [formData]);
 
     return (
-        <Form id='pizza-form'>
+        <Form id='pizza-form' onSubmit={onSubmit} action='/siparis-onay'>
             <FormGroup className='pizza-boyut'>
                 <FormGroup>
                     <Label for='pizza-boyut'>Boyut Seç <span>*</span></Label>
                     <FormGroup check>
-                        <Label check><Input type="radio" id='kucuk' name="boyut" onClick={() => { handleChange("boyut", "Küçük") }} /> Küçük</Label>
+                        <Label check><Input type="radio" id='kucuk' name="boyut" invalid={!!errors.boyut} onClick={() => { handleChange("boyut", "Küçük") }} /> Küçük</Label>
                     </FormGroup>
                     <FormGroup check>
-                        <Label check> <Input type="radio" id='orta' name="boyut" onClick={() => { handleChange("boyut", "Orta") }} /> Orta</Label>
+                        <Label check> <Input type="radio" id='orta' name="boyut" invalid={!!errors.boyut} onClick={() => { handleChange("boyut", "Orta") }} /> Orta</Label>
                     </FormGroup>
                     <FormGroup check>
-                        <Label check><Input type="radio" id='buyuk' name="boyut" onClick={() => { handleChange("boyut", "Büyük") }} /> Büyük</Label>
+                        <Label check><Input type="radio" id='buyuk' name="boyut" invalid={!!errors.boyut} onClick={() => { handleChange("boyut", "Büyük") }} /> Büyük</Label>
                     </FormGroup>
                     <FormFeedback>{errors.boyut}</FormFeedback>
                 </FormGroup>
@@ -129,9 +134,9 @@ const MyForm = (props) => {
                     <Dropdown id='size-dropdown' isOpen={dropdownOpen} toggle={toggle} value={formData.hamurSecimi}>
                         <DropdownToggle name="secim" caret>Seçim {formData.hamurSecimi}</DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem name="ince" onClick={() => { onSizeSelected("İnce") }}>İnce</DropdownItem>
-                            <DropdownItem name="normal" onClick={() => { onSizeSelected("Normal") }}>Normal</DropdownItem>
-                            <DropdownItem name="kalin" onClick={() => { onSizeSelected("Kalın") }}>Kalın</DropdownItem>
+                            <DropdownItem name="ince" onClick={() => { handleChange("hamurSecimi", "İnce") }}>İnce</DropdownItem>
+                            <DropdownItem name="normal" onClick={() => { handleChange("hamurSecimi", "Normal") }}>Normal</DropdownItem>
+                            <DropdownItem name="kalin" onClick={() => { handleChange("hamurSecimi", "Kalın") }}>Kalın</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                     <FormFeedback>{errors.hamurSecimi}</FormFeedback>
@@ -141,7 +146,7 @@ const MyForm = (props) => {
             <p>En fazla 5 malzeme seçebilirsiniz. 5₺</p>
             <FormGroup id='ek-malzemeler'>
                 {
-                    formData.malzemeler.map(malzeme => (
+                    malzemeler.map(malzeme => (
                         <FormGroup key={malzeme.name} className='malzeme'>
                             <Input
                                 id={malzeme.name}
@@ -149,6 +154,7 @@ const MyForm = (props) => {
                                 name={malzeme.name}
                                 value={malzeme.secim}
                                 onChange={inputCheckboxHandler}
+                                invalid={!!errors.malzemeler}
                             />
                             <Label style={{ "marginLeft": "10px" }}>
                                 {malzeme.title}
@@ -156,7 +162,7 @@ const MyForm = (props) => {
                         </FormGroup>
                     ))
                 }
-                <FormFeedback aria-invalid={!!errors.malzemeler}>{errors.malzemeler}</FormFeedback>
+                <FormFeedback>{errors.malzemeler}</FormFeedback>
             </FormGroup>
             <FormGroup>
                 <Label for="name-input">
@@ -206,7 +212,7 @@ const MyForm = (props) => {
                             <h4>{toplam()}₺</h4>
                         </div>
                     </div>
-                    <Link to="/siparis-onay"> <Button id='siparis-ver' disabled={!valid}>SİPARİŞ VER </Button></Link>
+                    <Button id='siparis-ver' disabled={!valid}>SİPARİŞ VER </Button>
 
                 </FormGroup>
             </div>

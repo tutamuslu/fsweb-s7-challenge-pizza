@@ -9,7 +9,7 @@ const App = () => {
   useEffect(() => {
     WebFont.load({
       google: {
-        families: ['Barlow', 'Bebas+Neue', 'Londrina+Solid']
+        families: ['Barlow', 'Quattrocento', 'Satisfy']
       }
     });
   }, []);

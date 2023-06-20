@@ -7,15 +7,15 @@ import MyForm from "./Form";
 export default function Siparis() {
 
     const malzemeler = [
-        { name: "misir", title: "Mısır", secim: false },
-        { name: "sucuk", title: "Sucuk", secim: false },
-        { name: "peynir", title: "Peynir", secim: false },
-        { name: "sosis", title: "Sosis", secim: false },
-        { name: "salam", title: "Salam", secim: false },
-        { name: "zeytin", title: "Zeytin", secim: false },
-        { name: "mantar", title: "Mantar", secim: false },
-        { name: "biber", title: "Biber", secim: false },
-        { name: "domat", title: "Domates", secim: false }
+        { name: "misir", title: "Mısır"},
+        { name: "sucuk", title: "Sucuk"},
+        { name: "peynir", title: "Peynir"},
+        { name: "sosis", title: "Sosis"},
+        { name: "salam", title: "Salam"},
+        { name: "zeytin", title: "Zeytin"},
+        { name: "mantar", title: "Mantar"},
+        { name: "biber", title: "Biber"},
+        { name: "domat", title: "Domates"}
     ]
 
     const urun = {
@@ -29,7 +29,7 @@ export default function Siparis() {
     useEffect(() => {
         WebFont.load({
             google: {
-                families: ['Barlow', 'Bebas+Neue', 'Londrina+Solid']
+                families: ['Barlow', 'Quattrocento', 'Satisfy']
             }
         });
     }, []);
