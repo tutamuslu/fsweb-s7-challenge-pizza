@@ -68,7 +68,7 @@ const MyForm = (props) => {
     // axios isteğinden sonra sipariş onaya geçeriz
     const onSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://620d69fb20ac3a4eedc05e3a.mockapi.io/api/products", formData)
+        axios.post("https://64e224e2ab0037358818c009.mockapi.io/api/v1/products", formData)
         .then(r => {
             // sipariş bilgileri
             console.log(r.data)
